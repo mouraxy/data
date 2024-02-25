@@ -58,3 +58,22 @@ def showDuplicates(df):
       yticklabels=False
     )
     return duplicates, percentage
+
+def showTopValues(df):
+    
+    """Shows the distribution of data by column of a Pandas DataFrame."""
+
+    fCol = []
+
+    for col in df.columns:
+        count = df[col].value_counts()
+        
+        data = {
+        'Var': col,
+        'Top1': count.index[0],
+        'Top2': count.index[1],
+        'Others': f'+{len(count) - 2}'
+        }
+        
+        fCol.append(data)
+    return pd.DataFrame(fCol)
