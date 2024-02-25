@@ -1,4 +1,6 @@
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from tabulate import tabulate
 
 def formatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".2f"):
@@ -34,3 +36,25 @@ def genMetadata(df):
       }
     )
     return metadata
+
+def showDuplicates(df):
+    """
+    Returns the number, percentage, and a heatmap of duplicates
+    """  
+    df_duplicated = df[df.duplicated()]
+    duplicates = len(df_duplicated)
+    percentage = duplicates / len(df)
+
+    plt.figure(
+      figsize=(7, 2), 
+      constrained_layout=True
+    ) 
+    
+    sns.heatmap(
+      df.duplicated().to_frame().transpose(),
+      cmap='binary',
+      cbar=False,
+      xticklabels=False,
+      yticklabels=False
+    )
+    return duplicates, percentage
