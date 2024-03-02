@@ -76,4 +76,17 @@ def showTopValues(df):
         }
         
         fCol.append(data)
+
     return pd.DataFrame(fCol)
+
+def CountCorrelatedColumns(CorrMatrix, CorrRange=0.85):
+    """Identifies variables with strong correlation"""
+
+    CorrelatedColumns = []
+  
+    for (var1, var2), corr in CorrMatrix.unstack().items():
+
+      if var1 != var2 and abs(corr) >= CorrRange:
+        CorrelatedColumns.append((var1, var2)) 
+
+    return CorrelatedColumns
