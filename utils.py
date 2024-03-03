@@ -38,26 +38,26 @@ def GetMetadata(df):
     return metadata
 
 def ShowDuplicates(df):
-    """
-    Returns the number, percentage, and a heatmap of duplicates
-    """  
+  
+    """Returns the number, percentage, and a heatmap of duplicates/message."""
+
     df_duplicated = df[df.duplicated()]
     duplicates = len(df_duplicated)
     percentage = duplicates / len(df)
-
-    plt.figure(
-      figsize=(7, 2), 
-      constrained_layout=True
-    ) 
     
-    sns.heatmap(
-      df.duplicated().to_frame().transpose(),
-      cmap='binary',
-      cbar=False,
-      xticklabels=False,
-      yticklabels=False
-    )
-    return duplicates, percentage
+    if duplicates > 0:
+        plt.figure(figsize=(7, 2), constrained_layout=True) 
+        sns.heatmap(
+            df.duplicated().to_frame().transpose(),
+            cmap='binary',
+            cbar=False,
+            xticklabels=False,
+            yticklabels=False
+        )
+        plt.show()
+        return duplicates, percentage
+    else:
+        print('DataFrame without duplicates')
 
 def ShowTopValues(df):
     
