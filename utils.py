@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 
-def formatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".2f"):
+def FormatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".2f"):
   
     """Returns a formatted table from a pandas DataFrame."""
 
@@ -17,7 +17,7 @@ def formatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".
     )
     return table
 
-def genMetadata(df):
+def GetMetadata(df):
     
     """Returns a table with the metadata of a Pandas DataFrame."""
 
@@ -37,7 +37,7 @@ def genMetadata(df):
     )
     return metadata
 
-def showDuplicates(df):
+def ShowDuplicates(df):
     """
     Returns the number, percentage, and a heatmap of duplicates
     """  
@@ -59,7 +59,7 @@ def showDuplicates(df):
     )
     return duplicates, percentage
 
-def showTopValues(df):
+def ShowTopValues(df):
     
     """Shows the distribution of data by column of a Pandas DataFrame."""
 
@@ -80,7 +80,8 @@ def showTopValues(df):
     return pd.DataFrame(fCol)
 
 def CountCorrelatedColumns(CorrMatrix, CorrRange=0.85):
-    """Identifies variables with strong correlation"""
+    
+    """Identifies variables with strong correlation."""
 
     CorrelatedColumns = []
   
@@ -90,3 +91,29 @@ def CountCorrelatedColumns(CorrMatrix, CorrRange=0.85):
         CorrelatedColumns.append((var1, var2)) 
 
     return CorrelatedColumns
+
+
+def ShowOutliers(df):
+
+    """Calculates the number of outliers for each feature and plots a bar chart."""
+
+    # iqr for each feature
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+
+    # outlier bounds
+    LowerBound = Q1 - 1.5 * IQR
+    UpperBound = Q3 + 1.5 * IQR
+
+    # outliers for each feature
+    Outliers = df[(df < LowerBound) | (df > UpperBound)]
+    OutliersCount = Outliers.count()
+
+    # plot the outliers
+    OutliersDf = pd.DataFrame(OutliersCount)
+    sns.barplot(x=OutliersDf.index, y=OutliersDf[0])
+    plt.xticks(rotation=90)
+    plt.xlabel('')
+    plt.ylabel('')
+    plt.show()
