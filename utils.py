@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from tabulate import tabulate
+from sklearn.model_selection import cross_val_score
 
 def FormatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".2f"):
   
@@ -57,7 +58,7 @@ def ShowDuplicates(df):
         plt.show()
         return duplicates, percentage
     else:
-        print('DataFrame without duplicates')
+        print('\n\n DataFrame without duplicates')
 
 def ShowTopValues(df):
     
@@ -117,3 +118,16 @@ def ShowOutliers(df):
     plt.xlabel('')
     plt.ylabel('')
     plt.show()
+
+def CrossValidation(Models, X_train, y_train, Metric='accuracy', cv=5):
+    
+    """Cross-validates a list of models."""
+
+    Rows = []
+    for ModelName, Model in Models.items():
+
+        Scores = cross_val_score(Model, X_train, y_train, scoring=Metric, cv=cv)
+        Rows.append([ModelName, Scores.mean()])
+    
+    df = pd.DataFrame(Rows, columns=['Model', Metric])
+    return df
