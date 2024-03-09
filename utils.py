@@ -2,7 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from tabulate import tabulate
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, RandomizedSearchCV
 
 def FormatTable(df, fmt="simple_outline", align="left", index=False, floatfmt=".2f"):
   
@@ -131,3 +131,11 @@ def CrossValidation(Models, X_train, y_train, Metric='accuracy', cv=5):
     
     df = pd.DataFrame(Rows, columns=['Model', Metric])
     return df
+
+def FindBestParameters(model, params, X_train, y_train, Metric='recall'):
+
+    """Randomly searches a list of hyperparameters."""
+
+    random_search = RandomizedSearchCV(model, params, scoring=Metric, cv=5, random_state=42)
+    random_search.fit(X_train, y_train)
+    return random_search
